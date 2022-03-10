@@ -9,7 +9,7 @@ public class SpawnPlayers : MonoBehaviour
 
     private float x = 4.6f;
     private float z = 4.6f;
-    private float y = 0.3f;
+    private float y = 1f;
 
     private void Start()
     {

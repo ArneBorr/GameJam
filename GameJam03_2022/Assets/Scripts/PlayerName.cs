@@ -17,7 +17,7 @@ public class PlayerName : MonoBehaviour
         {
             _playerName.text = PhotonNetwork.NickName;
         }
-        else 
+        else
         {
             _playerName.text = _view.Owner.NickName;
         }
