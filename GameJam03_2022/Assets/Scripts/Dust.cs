@@ -4,5 +4,17 @@ using UnityEngine;
 
 public class Dust : MonoBehaviour
 {
+    [SerializeField] List<Sprite> _sprites = new List<Sprite>();
 
+    private void Start()
+    {
+        if(_sprites.Count == 0) 
+        {
+            Debug.LogError("Dust::Start() -> No sprites given.");
+            return;
+        }
+
+        // Change the sprite of the dust particle to a random one
+        GetComponentInChildren<SpriteRenderer>().sprite = _sprites[Random.Range(0, _sprites.Count - 1)];        
+    }
 }
