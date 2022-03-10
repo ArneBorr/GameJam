@@ -94,9 +94,10 @@ GameObject:
   - component: {fileID: 2052053563901038583}
   - component: {fileID: 309713304447715185}
   - component: {fileID: 528030869028436356}
+  - component: {fileID: 9072321564530593427}
   m_Layer: 0
   m_Name: DustParticle
-  m_TagString: Untagged
+  m_TagString: Dust
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -173,3 +174,16 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &9072321564530593427
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5771816985812011763}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.53083265, y: 0.46833345, z: 0.3587615}
+  m_Center: {x: 0.013757348, y: 0.5845789, z: -0.0067350566}

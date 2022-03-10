@@ -14,7 +14,7 @@ public class DustSpawner : MonoBehaviour
     private void Update()
     {
         // Check if this is the host and if there are two players active
-        if (!PhotonNetwork.IsMasterClient || /*PhotonNetwork.CurrentRoom.PlayerCount != 4*/) return;
+        if (!PhotonNetwork.IsMasterClient /*|| PhotonNetwork.CurrentRoom.PlayerCount != 4*/) return;
 
         // Update spawn rate
         _deltaSpawn += Time.deltaTime;
@@ -27,8 +27,6 @@ public class DustSpawner : MonoBehaviour
 
     private void Spawn()
     {
-        Debug.Log("Spawned dust particle");
-
         // Position for the dust particle
         Vector3 dustLocation = new Vector3(Random.Range(_leftSpawnCorner.position.x, _rightSpawnCorner.position.x), 0f, Random.Range(_leftSpawnCorner.position.z, _rightSpawnCorner.position.z));
         PhotonNetwork.Instantiate(_dustPrefab.name, dustLocation, Quaternion.identity);
