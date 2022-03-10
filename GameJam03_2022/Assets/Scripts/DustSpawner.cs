@@ -14,7 +14,7 @@ public class DustSpawner : MonoBehaviour
     private void Update()
     {
         // Check if this is the host and if there are two players active
-        if (!PhotonNetwork.IsMasterClient /*|| PhotonNetwork.CurrentRoom.PlayerCount != 2*/) return;
+        if (!PhotonNetwork.IsMasterClient || /*PhotonNetwork.CurrentRoom.PlayerCount != 4*/) return;
 
         // Update spawn rate
         _deltaSpawn += Time.deltaTime;
