@@ -1,5 +1,5 @@
 1) Tapijt haar [v]
-2) Player en stofjes
+2) Player en stofjes [v]
 3) Multiplayer (online) [v]
 4) Huisstofmijten -> AI
 5) Bliksem ability
