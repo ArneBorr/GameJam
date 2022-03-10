@@ -15,6 +15,6 @@ public class Dust : MonoBehaviour
         }
 
         // Change the sprite of the dust particle to a random one
-        GetComponentInChildren<SpriteRenderer>().sprite = _sprites[Random.Range(0, _sprites.Count - 1)];        
+        GetComponentInChildren<SpriteRenderer>().sprite = _sprites[Random.Range(0, _sprites.Count)];        
     }
 }
