@@ -6,12 +6,15 @@ public class LightningProjectile : MonoBehaviour
     [SerializeField] private float _lifeTime = 5f;
 
     private GameObject _shooter = null;
+    private AudioSource _audioSource = null;
 
     public GameObject Shooter { set { _shooter = value; } }
 
     void Start()
     {
         GetComponent<Rigidbody>().AddForce(this.transform.forward * _movementspeed);
+        _audioSource = GetComponent<AudioSource>();
+        _audioSource.Play();
         Destroy(gameObject, _lifeTime);
     }
 
