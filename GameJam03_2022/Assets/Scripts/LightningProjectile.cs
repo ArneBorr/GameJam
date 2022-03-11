@@ -19,6 +19,7 @@ public class LightningProjectile : MonoBehaviour
         {
             Player p =other.gameObject.GetComponent<Player>();
             p.TakeDustOff(1);
+            Destroy(this.gameObject);
         }
     }
 }
