@@ -1,11 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LightningProjectile : MonoBehaviour
 {
     [SerializeField] private float _movementspeed = 0.5f;
     [SerializeField] private float _lifeTime = 5f;
+
+    private GameObject _shooter = null;
+
+    public GameObject Shooter { set { _shooter = value; } }
 
     void Start()
     {
@@ -17,9 +19,16 @@ public class LightningProjectile : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Player p =other.gameObject.GetComponent<Player>();
+            if (other.gameObject == _shooter) return;
+
+            Player p = other.gameObject.GetComponent<Player>();
             p.TakeDustOff(1);
             Destroy(this.gameObject);
+        }
+
+        else if (other.GetComponent<Huisstofmijt>()) 
+        {
+            Destroy(other.gameObject);
         }
     }
 }
