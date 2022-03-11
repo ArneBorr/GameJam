@@ -4,6 +4,23 @@ using UnityEngine;
 
 public class Huisstofmijt : MonoBehaviour
 {
+    private Transform _child;
+    private SpriteRenderer _visuals;
+    private Rigidbody _rb;
+
+    private void Start()
+    {
+        _visuals = GetComponentInChildren<SpriteRenderer>();
+        _child = GetComponentInChildren<Transform>();
+        _rb = GetComponent<Rigidbody>();
+    }
+
+    private void Update()
+    {
+        _child.rotation = Quaternion.identity;
+        _visuals.flipX = _rb.transform.forward.x > 0;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
