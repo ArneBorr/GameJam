@@ -17,7 +17,7 @@ public class Huisstofmijt : MonoBehaviour
     private void Update()
     {
         _child.rotation = Quaternion.identity;
-        _visuals.flipX = ;
+        _visuals.flipX = _agent.velocity.x > 0;
     }
 
     private void OnTriggerEnter(Collider other)
