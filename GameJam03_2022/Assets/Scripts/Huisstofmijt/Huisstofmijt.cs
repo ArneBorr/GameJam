@@ -6,13 +6,11 @@ public class Huisstofmijt : MonoBehaviour
 {
     private Transform _child;
     private SpriteRenderer _visuals;
-    private Rigidbody _rb;
 
     private void Start()
     {
         _visuals = GetComponentInChildren<SpriteRenderer>();
         _child = GetComponentInChildren<Transform>();
-        _rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
