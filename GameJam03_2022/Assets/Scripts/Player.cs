@@ -92,9 +92,9 @@ public class Player : MonoBehaviour
             Physics.Raycast(ray, out hitInfo);
 
             Vector3 mousePosOnBoard = hitInfo.point;
-            mousePosOnBoard.y = _lightningProjectilePrefab.transform.position.y;
+            mousePosOnBoard.y = _projectileSocket.transform.position.y;
 
-            GameObject obj = PhotonNetwork.Instantiate(_lightningProjectilePrefab.name, _projectileSocket.position, Quaternion.LookRotation(mousePosOnBoard - _lightningProjectilePrefab.transform.position));
+            GameObject obj = PhotonNetwork.Instantiate(_lightningProjectilePrefab.name, _projectileSocket.position, Quaternion.LookRotation(mousePosOnBoard - _projectileSocket.transform.position));
             obj.GetComponent<LightningProjectile>().Shooter = this.gameObject;
         }
     }
