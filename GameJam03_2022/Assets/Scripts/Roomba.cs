@@ -8,6 +8,7 @@ public class Roomba : MonoBehaviour
     [Header("--- Gameobjects & Components ---")]
     [SerializeField] private GameObject _checkpointParent;
     [SerializeField] private GameObject _particlesParent;
+    [SerializeField] private GameObject _particleWhoosh;
 
     [Header("--- Gameplay ---")]
     [SerializeField] private float _drivingSpeed = 2f;
@@ -20,6 +21,7 @@ public class Roomba : MonoBehaviour
     [SerializeField] private float _checkpointRadius = 15f;
 
     private List<ParticleSystem> _particles = new List<ParticleSystem>();
+    private List<ParticleSystem> _particlesWhoosh = new List<ParticleSystem>();
     private List<Vector2> _checkpointPositions = new List<Vector2>();
     private Vector3 _target = Vector3.zero;
     private Quaternion _initialRotation = Quaternion.identity;
@@ -29,6 +31,8 @@ public class Roomba : MonoBehaviour
     private float _deltaStationery = 0f;
     private float _deltaRotation = 0f;
     private float _deltaMovement = 0f;
+    private float _whooshPlayAfter = 1f;
+    private float _deltaParticles = 0f;
     private bool _isDriving = false;
     private bool _isRotating = false;
 
@@ -46,9 +50,15 @@ public class Roomba : MonoBehaviour
 
         // Handle particle systems
         _particles.Add(_particlesParent.GetComponent<ParticleSystem>());
-        foreach(ParticleSystem particlesS in _particlesParent.GetComponentsInChildren<ParticleSystem>()) 
+        foreach(ParticleSystem ps in _particlesParent.GetComponentsInChildren<ParticleSystem>()) 
         {
-            _particles.Add(particlesS);
+            _particles.Add(ps);
+        }
+
+        _particlesWhoosh.Add(_particleWhoosh.GetComponent<ParticleSystem>());
+        foreach (ParticleSystem ps in _particleWhoosh.GetComponentsInChildren<ParticleSystem>())
+        {
+            _particlesWhoosh.Add(ps);
         }
 
         _deltaStationery = _initialCooldown;
@@ -86,6 +96,13 @@ public class Roomba : MonoBehaviour
                 // Make roomba travel
                 _deltaMovement += Time.deltaTime;
                 transform.position = Vector3.Lerp(_initialPosition, _target, _movementSpeedCurve.Evaluate(_deltaMovement * _drivingSpeed));
+
+                _deltaParticles += Time.deltaTime;
+                if(_deltaParticles > _whooshPlayAfter) 
+                {
+                    foreach (ParticleSystem ps in _particlesWhoosh) ps.Play();
+                    _deltaParticles = 0f;
+                }
             }
         }
     }
