@@ -15,6 +15,10 @@ public class LightningProjectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.tag == "Player")
+        {
+            Player p =other.gameObject.GetComponent<Player>();
+            p.TakeDustOff(1);
+        }
     }
 }

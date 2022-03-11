@@ -20,13 +20,12 @@ public class Dust : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("qwe");
-        Debug.Log(other.tag);
-
+        Debug.Log("huh");
         if (other.tag == "Player")
         {
+            Debug.Log("Oke");
             Player p = other.gameObject.GetComponent<Player>();
-            p.DustPickedUp();
+            p.DustPickedUp(6);
             Destroy(this.gameObject);
         }
     }
