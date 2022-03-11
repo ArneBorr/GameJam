@@ -5,20 +5,31 @@ using System.Collections;
 
 public class Player : MonoBehaviour
 {
+    [Header("-------Movement Settings-------")]
     [SerializeField] private float _movementSpeed;
     [SerializeField, Range(0, 1)] private float _InstantMovementPercentage = 0.1f;
-    [SerializeField] private Material _carpetMaterial = null;
+
+    [Header("-------Mesh Settings-------")]
     [SerializeField] private GameObject[] _meshStates;
     [SerializeField] private int[] _meshStateScores;
     [SerializeField] private float _meshGrowth = 0.1f;
     [SerializeField] private float _meshGrowthSpeed = 1f;
+    [SerializeField] private int _scoreToStopGrowing = 15;
+
+    [Header("-------Projectile Settings-------")]
+    [SerializeField] private GameObject _lightningProjectilePrefab = null;
+    [SerializeField] private Transform _projectileSocket = null;
+
+    [Header("-------Other Settings-------")]
+    [SerializeField] private Material _carpetMaterial = null;
 
     private PlayerInputActions _inputActions = null;
     private CharacterController _characterController = null;
 
-    private Animator _animator;
+    private Animator[] _animator;
     private PhotonView _view;
 
+    private Vector3 _faceDirection = Vector3.zero;
     private int _score = 0;
     private int _playerId = 0;
     private int _currentMeshStateIndex = 0;
@@ -26,13 +37,14 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        _animator = GetComponentInChildren<Animator>();
+        _animator = GetComponentsInChildren<Animator>();
         _view = GetComponent<PhotonView>();
         _inputActions = new PlayerInputActions();
         _inputActions.Player.Fire.performed += Interact;
         _characterController = GetComponent<CharacterController>();
         _inputActions.Player.Enable();
         _playerId = PhotonNetwork.LocalPlayer.ActorNumber - 1;
+        _faceDirection = transform.forward;
 
         _meshStates[0].SetActive(true);
         for (int i=1; i < _meshStates.Length; i++)
@@ -53,12 +65,16 @@ public class Player : MonoBehaviour
     void HandleMovement()
     {
         Vector2 movementInput = _inputActions.Player.Move.ReadValue<Vector2>();
+        if (movementInput != Vector2.zero)
+            _faceDirection = new Vector3(movementInput.x, 0, movementInput.y);
 
         Vector3 currentVel = _characterController.velocity;
         Vector3 movement = Vector3.Lerp(new Vector3(currentVel.x, 0, currentVel.z), new Vector3(movementInput.x, 0, movementInput.y) * _movementSpeed, _InstantMovementPercentage);
 
         _characterController.SimpleMove(movement);
-        _animator.SetBool("isRunning", movementInput != Vector2.zero);
+
+        
+        _animator[_currentMeshStateIndex].SetBool("isRunning", movementInput != Vector2.zero);
     }
 
     private void UpdateMaterial()
@@ -67,45 +83,96 @@ public class Player : MonoBehaviour
     }
     private void Interact(InputAction.CallbackContext context)
     {
-        Debug.Log("Interact!");
+        _projectileSocket.position = this.transform.position + _faceDirection * 2;
+        PhotonNetwork.Instantiate(_lightningProjectilePrefab.name, _projectileSocket.position, Quaternion.LookRotation(_faceDirection));
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Dust")
-        {
-            Debug.Log("Picked up!");
-            ++_score;
-            Destroy(other.gameObject);
+    public void DustPickedUp(int amount)
+    {      
+        _score += amount;
+        StartCoroutine(Grow(amount));
+    }
 
-            if (_currentMeshStateIndex != _meshStateScores.Length - 1 && _meshStateScores[_currentMeshStateIndex + 1] <= _score)
+    public void TakeDustOff(int amount)
+    {
+        if (_score <= 0)
+            return;
+
+        _score = Mathf.Max(0, _score - amount);
+        StartCoroutine(Shrink(amount));
+    }
+
+    IEnumerator Shrink(int amount)
+    {        
+        int score = _score + amount;
+        for (int i = 0; i < amount; i++)
+        {
+            if (score < 0)
+                yield return null;
+
+            --score;
+            if (_currentMeshStateIndex != 0 && _meshStateScores[_currentMeshStateIndex] > score)
             {
-                Debug.Log("UPGRADE!");
                 _meshStates[_currentMeshStateIndex].SetActive(false);
-                ++_currentMeshStateIndex;
+                Vector3 scale = _meshStates[_currentMeshStateIndex].transform.localScale;
+                --_currentMeshStateIndex;
                 _meshStates[_currentMeshStateIndex].SetActive(true);
+                _meshStates[_currentMeshStateIndex].transform.localScale = scale;
             }
             else
             {
-                StartCoroutine(Grow());
-                
+                float elapsedTime = 0;
+                Vector3 initialScale = _meshStates[_currentMeshStateIndex].transform.localScale;
+                while (elapsedTime < _meshGrowthSpeed / amount)
+                {
+                    _meshStates[_currentMeshStateIndex].transform.localScale = Vector3.Lerp(initialScale * (1 - _meshGrowth), initialScale,
+                        1 - elapsedTime / _meshGrowthSpeed * amount);
+                    elapsedTime += Time.deltaTime;
+                    yield return null;
+                }
+
+                _meshStates[_currentMeshStateIndex].transform.localScale = initialScale * (1 - _meshGrowth);
             }
-        }
+        }  
+
+        yield return null;
     }
 
-    IEnumerator Grow()
+    //Increases scale when not needing to change sprite, changes sprite when score threshhold is reached
+    IEnumerator Grow(int amount)
     {
-        float elapsedTime = 0;
-        Vector3 initialScale = _meshStates[_currentMeshStateIndex].transform.localScale;
-        while (elapsedTime < _meshGrowthSpeed)
+        if (_score < _scoreToStopGrowing)
         {
-            _meshStates[_currentMeshStateIndex].transform.localScale = Vector3.Lerp(initialScale, initialScale * (1 + _meshGrowth), 
-                elapsedTime / _meshGrowthSpeed);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
+            int score = _score - amount;
+            for (int i = 0; i < amount; i++)
+            {
 
-        _meshStates[_currentMeshStateIndex].transform.localScale = initialScale * (1 + _meshGrowth);
+                ++score;
+                if (_currentMeshStateIndex != _meshStateScores.Length - 1 && _meshStateScores[_currentMeshStateIndex + 1] <= score)
+                {
+                    _meshStates[_currentMeshStateIndex].SetActive(false);
+                    Vector3 scale = _meshStates[_currentMeshStateIndex].transform.localScale;
+                    ++_currentMeshStateIndex;
+                    _meshStates[_currentMeshStateIndex].SetActive(true);
+                    _meshStates[_currentMeshStateIndex].transform.localScale = scale;
+                }
+                else
+                {
+                    float elapsedTime = 0;
+                    Vector3 initialScale = _meshStates[_currentMeshStateIndex].transform.localScale;
+                    while (elapsedTime < _meshGrowthSpeed / amount)
+                    {
+                        _meshStates[_currentMeshStateIndex].transform.localScale = Vector3.Lerp(initialScale, initialScale * (1 + _meshGrowth),
+                            elapsedTime / _meshGrowthSpeed * amount);
+                        elapsedTime += Time.deltaTime;
+                        yield return null;
+                    }
+
+                    _meshStates[_currentMeshStateIndex].transform.localScale = initialScale * (1 + _meshGrowth);
+                }
+            }
+        }    
+        
         yield return null;
     }
 }

@@ -17,4 +17,16 @@ public class Dust : MonoBehaviour
         // Change the sprite of the dust particle to a random one
         GetComponentInChildren<SpriteRenderer>().sprite = _sprites[Random.Range(0, _sprites.Count)];        
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("huh");
+        if (other.tag == "Player")
+        {
+            Debug.Log("Oke");
+            Player p = other.gameObject.GetComponent<Player>();
+            p.DustPickedUp(6);
+            Destroy(this.gameObject);
+        }
+    }
 }

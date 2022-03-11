@@ -105,6 +105,7 @@ Transform:
   - {fileID: 295457855312414384}
   - {fileID: 2287174707499807326}
   - {fileID: 9103580795494956315}
+  - {fileID: 8065485137447284490}
   m_Father: {fileID: 1793818346841357245}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -361,10 +362,9 @@ GameObject:
   - component: {fileID: 878662262476031665}
   - component: {fileID: 449774284978891432}
   - component: {fileID: 3799330881341562161}
-  - component: {fileID: 3743496821196702750}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -437,14 +437,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementSpeed: 5
   _InstantMovementPercentage: 0.1
-  _carpetMaterial: {fileID: 2100000, guid: 81097b69529f187438464a91ba7baf39, type: 2}
   _meshStates:
   - {fileID: 295457855312414391}
   - {fileID: 7968134835379518342}
   - {fileID: 1667113076447768075}
   _meshStateScores: 00000000050000000a000000
   _meshGrowth: 0.1
-  _meshGrowthSpeed: 3
+  _meshGrowthSpeed: 1.5
+  _scoreToStopGrowing: 15
+  _lightningProjectilePrefab: {fileID: 5734939721724521188, guid: 379c9fe34a94f664ba41b8a21cb9d72f, type: 3}
+  _projectileSocket: {fileID: 8065485137447284490}
+  _carpetMaterial: {fileID: 2100000, guid: 81097b69529f187438464a91ba7baf39, type: 2}
 --- !u!114 &878662262476031665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -508,19 +511,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &3743496821196702750
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1793818346841357222}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 0.6496004}
-  m_Center: {x: 0, y: 0, z: 0.009233043}
 --- !u!1 &3981248859425800699
 GameObject:
   m_ObjectHideFlags: 0
@@ -937,6 +927,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &4866703157893200238
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8065485137447284490}
+  m_Layer: 0
+  m_Name: Projectile_Socket
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8065485137447284490
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4866703157893200238}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.829}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 295457855586859576}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6171794086025599289
 GameObject:
   m_ObjectHideFlags: 0
