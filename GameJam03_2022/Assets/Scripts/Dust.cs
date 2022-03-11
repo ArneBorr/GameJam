@@ -20,10 +20,17 @@ public class Dust : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.tag);
         if (other.tag == "Player")
         {
             Player p = other.gameObject.GetComponent<Player>();
             p.DustPickedUp(1);
+            Destroy(this.gameObject);
+        }
+        if (other.tag == "Huisstofmijt")
+        {
+            TheKiwiCoder.BehaviourTreeRunner btr = other.GetComponent<TheKiwiCoder.BehaviourTreeRunner>();
+            btr.tree.blackboard.dustsMovingTo.Remove(this.gameObject);
             Destroy(this.gameObject);
         }
     }
