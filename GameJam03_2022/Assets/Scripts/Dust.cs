@@ -25,7 +25,7 @@ public class Dust : MonoBehaviour
         {
             Debug.Log("Oke");
             Player p = other.gameObject.GetComponent<Player>();
-            p.DustPickedUp(6);
+            p.DustPickedUp(1);
             Destroy(this.gameObject);
         }
     }
