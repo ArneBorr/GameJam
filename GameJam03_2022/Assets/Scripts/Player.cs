@@ -60,6 +60,8 @@ public class Player : MonoBehaviour
             HandleMovement();
             UpdateMaterial();
         }
+
+        _animator[_currentMeshStateIndex].SetBool("isRunning", _inputActions.Player.Move.ReadValue<Vector2>() != Vector2.zero);
     }
 
     void HandleMovement()
@@ -72,9 +74,6 @@ public class Player : MonoBehaviour
         Vector3 movement = Vector3.Lerp(new Vector3(currentVel.x, 0, currentVel.z), new Vector3(movementInput.x, 0, movementInput.y) * _movementSpeed, _InstantMovementPercentage);
 
         _characterController.SimpleMove(movement);
-
-        
-        _animator[_currentMeshStateIndex].SetBool("isRunning", movementInput != Vector2.zero);
     }
 
     private void UpdateMaterial()
