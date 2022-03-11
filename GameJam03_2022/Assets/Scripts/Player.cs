@@ -80,14 +80,23 @@ public class Player : MonoBehaviour
     {
         _carpetMaterial.SetVector("_PlayerPosition" + _playerId, _characterController.transform.position);
     }
+
     private void Interact(InputAction.CallbackContext context)
     {
         if (_view.IsMine)
         {
-            _projectileSocket.position = this.transform.position + _faceDirection * 2;
-            PhotonNetwork.Instantiate(_lightningProjectilePrefab.name, _projectileSocket.position, Quaternion.LookRotation(_faceDirection));
+            //_projectileSocket.position = this.transform.position + _faceDirection * 2;
+
+            RaycastHit hitInfo;
+            Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+            Physics.Raycast(ray, out hitInfo);
+
+            Vector3 mousePosOnBoard = hitInfo.point;
+            mousePosOnBoard.y = _lightningProjectilePrefab.transform.position.y;
+
+            GameObject obj = PhotonNetwork.Instantiate(_lightningProjectilePrefab.name, _projectileSocket.position, Quaternion.LookRotation(mousePosOnBoard - _lightningProjectilePrefab.transform.position));
+            obj.GetComponent<LightningProjectile>().Shooter = this.gameObject;
         }
-            
     }
 
     public void DustPickedUp(int amount)
