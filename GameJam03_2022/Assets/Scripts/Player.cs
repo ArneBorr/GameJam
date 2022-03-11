@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] private int[] _meshStateScores;
     [SerializeField] private float _meshGrowth = 0.1f;
     [SerializeField] private float _meshGrowthSpeed = 1f;
+    [SerializeField] private int _scoreToStopGrowing = 15;
 
     [Header("-------Projectile Settings-------")]
     [SerializeField] private GameObject _lightningProjectilePrefab = null;
@@ -86,35 +87,92 @@ public class Player : MonoBehaviour
         PhotonNetwork.Instantiate(_lightningProjectilePrefab.name, _projectileSocket.position, Quaternion.LookRotation(_faceDirection));
     }
 
-    public void DustPickedUp()
+    public void DustPickedUp(int amount)
     {      
-        ++_score;
-
-        if (_currentMeshStateIndex != _meshStateScores.Length - 1 && _meshStateScores[_currentMeshStateIndex + 1] <= _score)
-        {
-            _meshStates[_currentMeshStateIndex].SetActive(false);
-            ++_currentMeshStateIndex;
-            _meshStates[_currentMeshStateIndex].SetActive(true);
-        }
-        else
-        {
-            StartCoroutine(Grow());
-        }
+        _score += amount;
+        StartCoroutine(Grow(amount));
     }
 
-    IEnumerator Grow()
+    public void TakeDustOff(int amount)
     {
-        float elapsedTime = 0;
-        Vector3 initialScale = _meshStates[_currentMeshStateIndex].transform.localScale;
-        while (elapsedTime < _meshGrowthSpeed)
-        {
-            _meshStates[_currentMeshStateIndex].transform.localScale = Vector3.Lerp(initialScale, initialScale * (1 + _meshGrowth), 
-                elapsedTime / _meshGrowthSpeed);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
+        if (_score <= 0)
+            return;
 
-        _meshStates[_currentMeshStateIndex].transform.localScale = initialScale * (1 + _meshGrowth);
+        _score = Mathf.Max(0, _score - amount);
+        StartCoroutine(Shrink(amount));
+    }
+
+    IEnumerator Shrink(int amount)
+    {        
+        int score = _score + amount;
+        for (int i = 0; i < amount; i++)
+        {
+            if (score < 0)
+                yield return null;
+
+            --score;
+            if (_currentMeshStateIndex != 0 && _meshStateScores[_currentMeshStateIndex] > score)
+            {
+                _meshStates[_currentMeshStateIndex].SetActive(false);
+                Vector3 scale = _meshStates[_currentMeshStateIndex].transform.localScale;
+                --_currentMeshStateIndex;
+                _meshStates[_currentMeshStateIndex].SetActive(true);
+                _meshStates[_currentMeshStateIndex].transform.localScale = scale;
+            }
+            else
+            {
+                float elapsedTime = 0;
+                Vector3 initialScale = _meshStates[_currentMeshStateIndex].transform.localScale;
+                while (elapsedTime < _meshGrowthSpeed / amount)
+                {
+                    _meshStates[_currentMeshStateIndex].transform.localScale = Vector3.Lerp(initialScale * (1 - _meshGrowth), initialScale,
+                        1 - elapsedTime / _meshGrowthSpeed * amount);
+                    elapsedTime += Time.deltaTime;
+                    yield return null;
+                }
+
+                _meshStates[_currentMeshStateIndex].transform.localScale = initialScale * (1 - _meshGrowth);
+            }
+        }  
+
+        yield return null;
+    }
+
+    //Increases scale when not needing to change sprite, changes sprite when score threshhold is reached
+    IEnumerator Grow(int amount)
+    {
+        if (_score < _scoreToStopGrowing)
+        {
+            int score = _score - amount;
+            for (int i = 0; i < amount; i++)
+            {
+
+                ++score;
+                if (_currentMeshStateIndex != _meshStateScores.Length - 1 && _meshStateScores[_currentMeshStateIndex + 1] <= score)
+                {
+                    _meshStates[_currentMeshStateIndex].SetActive(false);
+                    Vector3 scale = _meshStates[_currentMeshStateIndex].transform.localScale;
+                    ++_currentMeshStateIndex;
+                    _meshStates[_currentMeshStateIndex].SetActive(true);
+                    _meshStates[_currentMeshStateIndex].transform.localScale = scale;
+                }
+                else
+                {
+                    float elapsedTime = 0;
+                    Vector3 initialScale = _meshStates[_currentMeshStateIndex].transform.localScale;
+                    while (elapsedTime < _meshGrowthSpeed / amount)
+                    {
+                        _meshStates[_currentMeshStateIndex].transform.localScale = Vector3.Lerp(initialScale, initialScale * (1 + _meshGrowth),
+                            elapsedTime / _meshGrowthSpeed * amount);
+                        elapsedTime += Time.deltaTime;
+                        yield return null;
+                    }
+
+                    _meshStates[_currentMeshStateIndex].transform.localScale = initialScale * (1 + _meshGrowth);
+                }
+            }
+        }    
+        
         yield return null;
     }
 }
