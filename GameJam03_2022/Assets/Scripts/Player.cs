@@ -12,13 +12,15 @@ public class Player : MonoBehaviour
     [SerializeField] private int[] _meshStateScores;
     [SerializeField] private float _meshGrowth = 0.1f;
     [SerializeField] private float _meshGrowthSpeed = 1f;
+    [SerializeField] private GameObject _lightningProjectilePrefab = null;
 
     private PlayerInputActions _inputActions = null;
     private CharacterController _characterController = null;
 
-    private Animator _animator;
+    private Animator[] _animator;
     private PhotonView _view;
 
+    private Vector3 _faceDirection = Vector3.zero;
     private int _score = 0;
     private int _playerId = 0;
     private int _currentMeshStateIndex = 0;
@@ -26,7 +28,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        _animator = GetComponentInChildren<Animator>();
+        _animator = GetComponentsInChildren<Animator>();
         _view = GetComponent<PhotonView>();
         _inputActions = new PlayerInputActions();
         _inputActions.Player.Fire.performed += Interact;
@@ -58,7 +60,8 @@ public class Player : MonoBehaviour
         Vector3 movement = Vector3.Lerp(new Vector3(currentVel.x, 0, currentVel.z), new Vector3(movementInput.x, 0, movementInput.y) * _movementSpeed, _InstantMovementPercentage);
 
         _characterController.SimpleMove(movement);
-        _animator.SetBool("isRunning", movementInput != Vector2.zero);
+        _animator[_currentMeshStateIndex].SetBool("isRunning", movementInput != Vector2.zero);
+        _faceDirection = currentVel.normalized;
     }
 
     private void UpdateMaterial()
@@ -67,7 +70,8 @@ public class Player : MonoBehaviour
     }
     private void Interact(InputAction.CallbackContext context)
     {
-        Debug.Log("Interact!");
+        Vector3 location = this.transform.position + _faceDirection * 5; // Temporary
+        //PhotonNetwork.Instantiate(_lightningProjectilePrefab.name, location, Quaternion.LookRotation(_faceDirection, new Vector3(0, 1, 0)));
     }
 
     private void OnTriggerEnter(Collider other)
