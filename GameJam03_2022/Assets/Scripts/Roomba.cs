@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using System.Collections;
 
 public class Roomba : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class Roomba : MonoBehaviour
     private Vector3 _target = Vector3.zero;
     private Quaternion _initialRotation = Quaternion.identity;
     private Vector3 _initialPosition = Vector3.zero;
+    private AudioSource _audioSource = null;
 
     private float _deltaStationery = 0f;
     private float _deltaRotation = 0f;
@@ -33,7 +35,9 @@ public class Roomba : MonoBehaviour
     private void Start()
     {
         if (!PhotonNetwork.IsMasterClient) return;
-        
+
+        _audioSource = GetComponent<AudioSource>();
+
         foreach (Transform checkpoint in _checkpointParent.GetComponentsInChildren<Transform>())
         {
             // Retrieve all the checkpoint data (we don't need the y pos)
@@ -123,6 +127,8 @@ public class Roomba : MonoBehaviour
 
         foreach (ParticleSystem ps in _particles) ps.Play();
 
+        _audioSource.Play();
+
         Debug.Log("Roomba started driving");
     }
 
@@ -133,6 +139,23 @@ public class Roomba : MonoBehaviour
 
         foreach (ParticleSystem ps in _particles) ps.Stop();
 
+        StartCoroutine(FadeOut(_audioSource, 1));
+
         Debug.Log("Roomba arrived");
+    }
+
+    IEnumerator FadeOut(AudioSource audioSource, float FadeTime)
+    {
+        float startVolume = audioSource.volume;
+
+        while (audioSource.volume > 0)
+        {
+            audioSource.volume -= startVolume * Time.deltaTime / FadeTime;
+
+            yield return null;
+        }
+
+        audioSource.Stop();
+        audioSource.volume = startVolume;
     }
 }
