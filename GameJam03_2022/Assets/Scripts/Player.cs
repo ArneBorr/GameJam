@@ -59,9 +59,9 @@ public class Player : MonoBehaviour
         {
             HandleMovement();
             UpdateMaterial();
-        }
 
-        _animator[_currentMeshStateIndex].SetBool("isRunning", _inputActions.Player.Move.ReadValue<Vector2>() != Vector2.zero);
+            _animator[_currentMeshStateIndex].SetBool("isRunning", _inputActions.Player.Move.ReadValue<Vector2>() != Vector2.zero);
+        }
     }
 
     void HandleMovement()
