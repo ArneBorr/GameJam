@@ -28,9 +28,9 @@ public class LightningProjectile : MonoBehaviour
             p.TakeDustOff(1);
             Destroy(this.gameObject);
         }
-
         else if (other.GetComponent<Huisstofmijt>()) 
         {
+            GameObject.FindObjectOfType<HuisstofmijtManager>().SpawnMijt();
             Destroy(other.gameObject);
         }
     }
