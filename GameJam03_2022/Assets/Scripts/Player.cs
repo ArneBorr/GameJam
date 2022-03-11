@@ -60,6 +60,8 @@ public class Player : MonoBehaviour
             HandleMovement();
             UpdateMaterial();
         }
+
+        _animator[_currentMeshStateIndex].SetBool("isRunning", _inputActions.Player.Move.ReadValue<Vector2>() != Vector2.zero);
     }
 
     void HandleMovement()
@@ -72,9 +74,6 @@ public class Player : MonoBehaviour
         Vector3 movement = Vector3.Lerp(new Vector3(currentVel.x, 0, currentVel.z), new Vector3(movementInput.x, 0, movementInput.y) * _movementSpeed, _InstantMovementPercentage);
 
         _characterController.SimpleMove(movement);
-
-        
-        _animator[_currentMeshStateIndex].SetBool("isRunning", movementInput != Vector2.zero);
     }
 
     private void UpdateMaterial()
@@ -83,14 +82,33 @@ public class Player : MonoBehaviour
     }
     private void Interact(InputAction.CallbackContext context)
     {
-        _projectileSocket.position = this.transform.position + _faceDirection * 2;
-        PhotonNetwork.Instantiate(_lightningProjectilePrefab.name, _projectileSocket.position, Quaternion.LookRotation(_faceDirection));
+        if (_view.IsMine)
+        {
+            _projectileSocket.position = this.transform.position + _faceDirection * 2;
+            PhotonNetwork.Instantiate(_lightningProjectilePrefab.name, _projectileSocket.position, Quaternion.LookRotation(_faceDirection));
+        }
+            
     }
 
     public void DustPickedUp(int amount)
     {      
         _score += amount;
-        StartCoroutine(Grow(amount));
+
+        bool changeSprite = false;
+        while (_currentMeshStateIndex != _meshStateScores.Length - 1 && _meshStateScores[_currentMeshStateIndex + 1] <= _score)
+        {
+            changeSprite = true;
+            _meshStates[_currentMeshStateIndex].SetActive(false);
+            Vector3 scale = _meshStates[_currentMeshStateIndex].transform.localScale;
+            ++_currentMeshStateIndex;
+            _meshStates[_currentMeshStateIndex].SetActive(true);
+            _meshStates[_currentMeshStateIndex].transform.localScale = scale;
+        }
+
+        if (!changeSprite)
+        {
+            _meshStates[_currentMeshStateIndex].transform.localScale *= (1 + _meshGrowth * amount);
+        }
     }
 
     public void TakeDustOff(int amount)
@@ -99,7 +117,24 @@ public class Player : MonoBehaviour
             return;
 
         _score = Mathf.Max(0, _score - amount);
-        StartCoroutine(Shrink(amount));
+
+        bool changeSprite = false;
+
+        while (_currentMeshStateIndex != 0 && _meshStateScores[_currentMeshStateIndex] > _score)
+        {
+            changeSprite = true;
+
+            _meshStates[_currentMeshStateIndex].SetActive(false);
+            Vector3 scale = _meshStates[_currentMeshStateIndex].transform.localScale;
+            --_currentMeshStateIndex;
+            _meshStates[_currentMeshStateIndex].SetActive(true);
+            _meshStates[_currentMeshStateIndex].transform.localScale = scale;
+        }
+
+        if (!changeSprite)
+        {
+            _meshStates[_currentMeshStateIndex].transform.localScale *= (1 - _meshGrowth * amount);
+        }
     }
 
     IEnumerator Shrink(int amount)

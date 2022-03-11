@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 295457855312414384}
   - component: {fileID: 295457855312414386}
   - component: {fileID: 607023861429874592}
+  - component: {fileID: 1545978897006656938}
   m_Layer: 0
   m_Name: Visuals_State1
   m_TagString: Untagged
@@ -74,6 +75,22 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+--- !u!114 &1545978897006656938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 295457855312414391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 1
+  m_UseLocal: 1
 --- !u!1 &295457855586859583
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,6 +301,7 @@ GameObject:
   - component: {fileID: 9103580795494956315}
   - component: {fileID: 1946777049131090049}
   - component: {fileID: 1146937875465080485}
+  - component: {fileID: 8732440588110783613}
   m_Layer: 0
   m_Name: Visuals_State3
   m_TagString: Untagged
@@ -347,6 +365,22 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+--- !u!114 &8732440588110783613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1667113076447768075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 1
+  m_UseLocal: 1
 --- !u!1 &1793818346841357222
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,8 +452,11 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 878662262476031665}
   - {fileID: 607023861429874592}
+  - {fileID: 1545978897006656938}
   - {fileID: 887410320229174659}
+  - {fileID: 2286535557879764052}
   - {fileID: 1146937875465080485}
+  - {fileID: 8732440588110783613}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1715,6 +1752,7 @@ GameObject:
   - component: {fileID: 2287174707499807326}
   - component: {fileID: 8357371355328808607}
   - component: {fileID: 887410320229174659}
+  - component: {fileID: 2286535557879764052}
   m_Layer: 0
   m_Name: Visuals_State2
   m_TagString: Untagged
@@ -1778,6 +1816,22 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+--- !u!114 &2286535557879764052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7968134835379518342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 1
+  m_UseLocal: 1
 --- !u!1 &8557160869109263544
 GameObject:
   m_ObjectHideFlags: 0
