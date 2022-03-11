@@ -31,7 +31,8 @@ public class Dust : MonoBehaviour
         {
             TheKiwiCoder.BehaviourTreeRunner btr = other.GetComponent<TheKiwiCoder.BehaviourTreeRunner>();
             btr.tree.blackboard.dustsMovingTo.Remove(this.gameObject);
-            Destroy(this.gameObject);
+            other.GetComponent<AudioSource>().Play();
+            Destroy(this.gameObject, other.GetComponent<AudioSource>().time);
         }
     }
 }
