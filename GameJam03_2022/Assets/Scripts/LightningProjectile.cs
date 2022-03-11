@@ -12,4 +12,9 @@ public class LightningProjectile : MonoBehaviour
         GetComponent<Rigidbody>().AddForce(this.transform.forward * _movementspeed);
         Destroy(gameObject, _lifeTime);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        
+    }
 }

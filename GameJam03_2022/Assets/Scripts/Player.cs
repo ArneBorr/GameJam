@@ -5,14 +5,22 @@ using System.Collections;
 
 public class Player : MonoBehaviour
 {
+    [Header("-------Movement Settings-------")]
     [SerializeField] private float _movementSpeed;
     [SerializeField, Range(0, 1)] private float _InstantMovementPercentage = 0.1f;
-    [SerializeField] private Material _carpetMaterial = null;
+
+    [Header("-------Mesh Settings-------")]
     [SerializeField] private GameObject[] _meshStates;
     [SerializeField] private int[] _meshStateScores;
     [SerializeField] private float _meshGrowth = 0.1f;
     [SerializeField] private float _meshGrowthSpeed = 1f;
+
+    [Header("-------Projectile Settings-------")]
     [SerializeField] private GameObject _lightningProjectilePrefab = null;
+    [SerializeField] private Transform _projectileSocket = null;
+
+    [Header("-------Other Settings-------")]
+    [SerializeField] private Material _carpetMaterial = null;
 
     private PlayerInputActions _inputActions = null;
     private CharacterController _characterController = null;
@@ -35,6 +43,7 @@ public class Player : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
         _inputActions.Player.Enable();
         _playerId = PhotonNetwork.LocalPlayer.ActorNumber - 1;
+        _faceDirection = transform.forward;
 
         _meshStates[0].SetActive(true);
         for (int i=1; i < _meshStates.Length; i++)
@@ -55,13 +64,16 @@ public class Player : MonoBehaviour
     void HandleMovement()
     {
         Vector2 movementInput = _inputActions.Player.Move.ReadValue<Vector2>();
+        if (movementInput != Vector2.zero)
+            _faceDirection = new Vector3(movementInput.x, 0, movementInput.y);
 
         Vector3 currentVel = _characterController.velocity;
         Vector3 movement = Vector3.Lerp(new Vector3(currentVel.x, 0, currentVel.z), new Vector3(movementInput.x, 0, movementInput.y) * _movementSpeed, _InstantMovementPercentage);
 
         _characterController.SimpleMove(movement);
+
+        
         _animator[_currentMeshStateIndex].SetBool("isRunning", movementInput != Vector2.zero);
-        _faceDirection = currentVel.normalized;
     }
 
     private void UpdateMaterial()
@@ -70,30 +82,23 @@ public class Player : MonoBehaviour
     }
     private void Interact(InputAction.CallbackContext context)
     {
-        Vector3 location = this.transform.position + _faceDirection * 5; // Temporary
-        //PhotonNetwork.Instantiate(_lightningProjectilePrefab.name, location, Quaternion.LookRotation(_faceDirection, new Vector3(0, 1, 0)));
+        _projectileSocket.position = this.transform.position + _faceDirection * 2;
+        PhotonNetwork.Instantiate(_lightningProjectilePrefab.name, _projectileSocket.position, Quaternion.LookRotation(_faceDirection));
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Dust")
-        {
-            Debug.Log("Picked up!");
-            ++_score;
-            Destroy(other.gameObject);
+    public void DustPickedUp()
+    {      
+        ++_score;
 
-            if (_currentMeshStateIndex != _meshStateScores.Length - 1 && _meshStateScores[_currentMeshStateIndex + 1] <= _score)
-            {
-                Debug.Log("UPGRADE!");
-                _meshStates[_currentMeshStateIndex].SetActive(false);
-                ++_currentMeshStateIndex;
-                _meshStates[_currentMeshStateIndex].SetActive(true);
-            }
-            else
-            {
-                StartCoroutine(Grow());
-                
-            }
+        if (_currentMeshStateIndex != _meshStateScores.Length - 1 && _meshStateScores[_currentMeshStateIndex + 1] <= _score)
+        {
+            _meshStates[_currentMeshStateIndex].SetActive(false);
+            ++_currentMeshStateIndex;
+            _meshStates[_currentMeshStateIndex].SetActive(true);
+        }
+        else
+        {
+            StartCoroutine(Grow());
         }
     }
 
