@@ -82,14 +82,33 @@ public class Player : MonoBehaviour
     }
     private void Interact(InputAction.CallbackContext context)
     {
-        _projectileSocket.position = this.transform.position + _faceDirection * 2;
-        PhotonNetwork.Instantiate(_lightningProjectilePrefab.name, _projectileSocket.position, Quaternion.LookRotation(_faceDirection));
+        if (_view.IsMine)
+        {
+            _projectileSocket.position = this.transform.position + _faceDirection * 2;
+            PhotonNetwork.Instantiate(_lightningProjectilePrefab.name, _projectileSocket.position, Quaternion.LookRotation(_faceDirection));
+        }
+            
     }
 
     public void DustPickedUp(int amount)
     {      
         _score += amount;
-        StartCoroutine(Grow(amount));
+
+        bool changeSprite = false;
+        while (_currentMeshStateIndex != _meshStateScores.Length - 1 && _meshStateScores[_currentMeshStateIndex + 1] <= _score)
+        {
+            changeSprite = true;
+            _meshStates[_currentMeshStateIndex].SetActive(false);
+            Vector3 scale = _meshStates[_currentMeshStateIndex].transform.localScale;
+            ++_currentMeshStateIndex;
+            _meshStates[_currentMeshStateIndex].SetActive(true);
+            _meshStates[_currentMeshStateIndex].transform.localScale = scale;
+        }
+
+        if (!changeSprite)
+        {
+            _meshStates[_currentMeshStateIndex].transform.localScale *= (1 + _meshGrowth * amount);
+        }
     }
 
     public void TakeDustOff(int amount)
@@ -98,7 +117,24 @@ public class Player : MonoBehaviour
             return;
 
         _score = Mathf.Max(0, _score - amount);
-        StartCoroutine(Shrink(amount));
+
+        bool changeSprite = false;
+
+        while (_currentMeshStateIndex != 0 && _meshStateScores[_currentMeshStateIndex] > _score)
+        {
+            changeSprite = true;
+
+            _meshStates[_currentMeshStateIndex].SetActive(false);
+            Vector3 scale = _meshStates[_currentMeshStateIndex].transform.localScale;
+            --_currentMeshStateIndex;
+            _meshStates[_currentMeshStateIndex].SetActive(true);
+            _meshStates[_currentMeshStateIndex].transform.localScale = scale;
+        }
+
+        if (!changeSprite)
+        {
+            _meshStates[_currentMeshStateIndex].transform.localScale *= (1 - _meshGrowth * amount);
+        }
     }
 
     IEnumerator Shrink(int amount)
