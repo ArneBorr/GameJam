@@ -13,5 +13,14 @@ public class VacuumDestroy : MonoBehaviour
         {
             Destroy(other.gameObject);
         }
+        else if (other.CompareTag("Huisstofmijt"))
+        {
+            Destroy(other.gameObject);
+            GameObject.FindObjectOfType<HuisstofmijtManager>().SpawnMijt();
+        }
+        else if (other.CompareTag("Dust"))
+        {
+            Destroy(other.gameObject);
+        }
     }
 }

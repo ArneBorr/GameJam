@@ -126,7 +126,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _PlayerPosition0: {r: -3.0512373, g: 1.0799999, b: -4.265509, a: 0}
+    - _PlayerPosition0: {r: -0.5514954, g: 1.08, b: -5.510438, a: 0}
     - _PlayerPosition1: {r: 100000, g: 10000, b: 100000, a: 0}
     - _PlayerPosition2: {r: 10000, g: 10000, b: 10000, a: 0}
     - _PlayerPosition3: {r: 10000, g: 10000, b: 10000, a: 0}

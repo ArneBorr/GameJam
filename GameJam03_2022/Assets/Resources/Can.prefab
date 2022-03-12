@@ -136,6 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dustToTakeOffPlayer: 3
+  _beingSucked: 0
 --- !u!208 &1414369993426885797
 NavMeshObstacle:
   m_ObjectHideFlags: 0

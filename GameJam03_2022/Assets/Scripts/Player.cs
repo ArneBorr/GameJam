@@ -172,7 +172,8 @@ public class Player : MonoBehaviour
 
         if (!changeSprite)
         {
-            _meshStates[_currentMeshStateIndex].transform.localScale *= (1 - _meshGrowth * amount);
+            for (int i=0; i < amount; i++)
+                _meshStates[_currentMeshStateIndex].transform.localScale *= (1 - _meshGrowth);
         }
     }
 
