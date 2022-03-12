@@ -81,7 +81,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2DAsset_2bde893a97e34a4897820212c230d9e6_Out_0:
-        m_Texture: {fileID: 2800000, guid: 7a1a5cd6a7571604f8f87953e08f44b5, type: 3}
+        m_Texture: {fileID: 2800000, guid: 4a9a23ee2b2c74a46a37dcaf69b5f989, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2DAsset_36b62acb30b742df8af56e6bc8ffb917_Out_0:
@@ -147,7 +147,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _PlayerPosition: {r: -0.9644601, g: 0.53734994, b: -1.2386968, a: 0}
-    - _PlayerPosition0: {r: -4.110041, g: 1.0799999, b: -0.30824563, a: 0}
+    - _PlayerPosition0: {r: 0.57654166, g: 1.0799999, b: 4.484107, a: 0}
     - _PlayerPosition1: {r: 0.9203297, g: 0.53734994, b: -1.8145247, a: 0}
     - _PlayerPosition2: {r: 0, g: 0, b: 0, a: 0}
     - _PlayerPosition3: {r: 0, g: 0, b: 0, a: 0}
