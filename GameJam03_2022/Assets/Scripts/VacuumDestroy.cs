@@ -9,5 +9,9 @@ public class VacuumDestroy : MonoBehaviour
             if (other.GetComponent<Player>().IsBeingVacuumed)
                 other.GetComponent<Player>().Vacuum();
         }
+        else if (other.CompareTag("Can"))
+        {
+            Destroy(other.gameObject);
+        }
     }
 }

@@ -27,20 +27,31 @@ public class VacuumSucker : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player")) return;
+        if (other.CompareTag("Player"))
+        {
+            // Add rb for ragdoll if the user doesn't already have one
+            Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+            if (!rb) rb = other.gameObject.AddComponent<Rigidbody>();
 
-        // Add rb for ragdoll if the user doesn't already have one
-        Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
-        if (!rb) rb = other.gameObject.AddComponent<Rigidbody>();
+            rb.useGravity = false;
 
-        rb.useGravity = false;
+            other.GetComponent<Player>().IsBeingVacuumed = true;
 
-        other.GetComponent<Player>().IsBeingVacuumed = true;
+            _rbToPull.Add(rb);
 
-        _rbToPull.Add(rb);
-
-        // Disable charcontr during ragdoll
-        other.GetComponent<CharacterController>().enabled = false;
+            // Disable charcontr during ragdoll
+            other.GetComponent<CharacterController>().enabled = false;
+        }
+        else if (other.CompareTag("Can"))
+        {
+            Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+            other.gameObject.GetComponent<Can>()._beingSucked = true;
+            rb.useGravity = false;
+            rb.drag = 0;
+            rb.mass = 1f;
+            rb.angularDrag = 0;
+            _rbToPull.Add(rb);
+        }    
     }
 
     private void OnTriggerExit(Collider other)
@@ -53,10 +64,18 @@ public class VacuumSucker : MonoBehaviour
             {
                 // Remove rb from the list
                 _rbToPull.Remove(rb);
-                Destroy(rb);
-                other.GetComponent<CharacterController>().enabled = true;
-                other.transform.rotation = Quaternion.identity;
-                other.GetComponent<Player>().IsBeingVacuumed = false;
+
+                if (other.CompareTag("Player"))
+                {
+                    Destroy(rb);
+                    other.GetComponent<CharacterController>().enabled = true;
+                    other.transform.rotation = Quaternion.identity;
+                    other.GetComponent<Player>().IsBeingVacuumed = false;
+                }
+                else if (other.CompareTag("Can"))
+                {
+                    other.gameObject.GetComponent<Can>()._beingSucked = false;
+                }
 
                 return;
             }
