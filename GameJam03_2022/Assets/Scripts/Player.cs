@@ -1,7 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.InputSystem;
-using System.Collections;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -21,8 +23,13 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform _projectileSocket = null;
 
     [Header("-------Other Settings-------")]
+    [SerializeField] private GameObject _electricParticleParent = null;
     [SerializeField] private Material _carpetMaterial = null;
 
+    private TextMeshProUGUI _totalScoreText = null;
+    private TextMeshProUGUI _currentScoreText = null;
+    private List<ParticleSystem> _particles = new List<ParticleSystem>();
+    
     private PlayerInputActions _inputActions = null;
     private CharacterController _characterController = null;
 
@@ -31,9 +38,12 @@ public class Player : MonoBehaviour
 
     private Vector3 _faceDirection = Vector3.zero;
     private int _score = 0;
+    private int _totalScore = 0;
     private int _playerId = 0;
     private int _currentMeshStateIndex = 0;
+    private bool _isCharged = false;
 
+    public bool IsBeingVacuumed { get; set; }
 
     private void Start()
     {
@@ -46,6 +56,12 @@ public class Player : MonoBehaviour
         _playerId = PhotonNetwork.LocalPlayer.ActorNumber - 1;
         _faceDirection = transform.forward;
 
+        _particles.Add(_electricParticleParent.GetComponent<ParticleSystem>());
+        foreach (ParticleSystem ps in _electricParticleParent.GetComponentsInChildren<ParticleSystem>()) _particles.Add(ps);
+
+        _totalScoreText = GameObject.Find("TotalScoreValue").GetComponent<TextMeshProUGUI>();
+        _currentScoreText = GameObject.Find("CurrentScoreValue").GetComponent<TextMeshProUGUI>();
+
         _meshStates[0].SetActive(true);
         for (int i=1; i < _meshStates.Length; i++)
         {
@@ -57,6 +73,9 @@ public class Player : MonoBehaviour
     {
         if (_view.IsMine)
         {
+            _totalScoreText.text = _totalScore.ToString();
+            _currentScoreText.text = _score.ToString();
+
             HandleMovement();
             UpdateMaterial();
 
@@ -68,7 +87,7 @@ public class Player : MonoBehaviour
     {
         Vector2 movementInput = _inputActions.Player.Move.ReadValue<Vector2>();
         if (movementInput != Vector2.zero)
-            _faceDirection = new Vector3(movementInput.x, 0, movementInput.y);
+            _faceDirection = new Vector3(movementInput.x, 0f, movementInput.y);
 
         Vector3 currentVel = _characterController.velocity;
         Vector3 movement = Vector3.Lerp(new Vector3(currentVel.x, 0, currentVel.z), new Vector3(movementInput.x, 0, movementInput.y) * _movementSpeed, _InstantMovementPercentage);
@@ -83,10 +102,8 @@ public class Player : MonoBehaviour
 
     private void Interact(InputAction.CallbackContext context)
     {
-        if (_view.IsMine)
+        if (_view.IsMine && _isCharged)
         {
-            //_projectileSocket.position = this.transform.position + _faceDirection * 2;
-
             RaycastHit hitInfo;
             Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
             Physics.Raycast(ray, out hitInfo);
@@ -96,6 +113,9 @@ public class Player : MonoBehaviour
 
             GameObject obj = PhotonNetwork.Instantiate(_lightningProjectilePrefab.name, _projectileSocket.position, Quaternion.LookRotation(mousePosOnBoard - _projectileSocket.transform.position));
             obj.GetComponent<LightningProjectile>().Shooter = this.gameObject;
+
+            _isCharged = false;
+            foreach (ParticleSystem ps in _particles) ps.Stop();
         }
     }
 
@@ -144,6 +164,28 @@ public class Player : MonoBehaviour
         {
             _meshStates[_currentMeshStateIndex].transform.localScale *= (1 - _meshGrowth * amount);
         }
+    }
+
+    public void Vacuum() 
+    {
+        _totalScore += _score;
+        TakeDustOff(_score);
+
+        IsBeingVacuumed = false;
+
+        transform.position = new Vector3(0f, 10f, 0f);
+        transform.rotation = Quaternion.identity;
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb) Destroy(rb);
+
+        _characterController.enabled = true;
+    }
+
+    public void Charge() 
+    {
+        foreach (ParticleSystem ps in _particles) ps.Play();
+        _isCharged = true;
     }
 
     IEnumerator Shrink(int amount)

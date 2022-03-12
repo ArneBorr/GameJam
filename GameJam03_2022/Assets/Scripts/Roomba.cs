@@ -9,6 +9,7 @@ public class Roomba : MonoBehaviour
     [SerializeField] private GameObject _checkpointParent;
     [SerializeField] private GameObject _particlesParent;
     [SerializeField] private GameObject _particleWhoosh;
+    [SerializeField] private GameObject _vacuumSucker;
 
     [Header("--- Gameplay ---")]
     [SerializeField] private float _drivingSpeed = 2f;
@@ -62,6 +63,7 @@ public class Roomba : MonoBehaviour
         }
 
         _deltaStationery = _initialCooldown;
+        _vacuumSucker.SetActive(false);
     }
 
     private void Update()
@@ -90,7 +92,7 @@ public class Roomba : MonoBehaviour
         else if(_isDriving)
         {
             // Check if Roomba has arrived
-            if(Vector3.Distance(_target, transform.position) < 0.1f) Arrive();
+            if (Vector3.Distance(_target, transform.position) < 0.1f) Arrive();
             else 
             {
                 // Make roomba travel
@@ -142,6 +144,8 @@ public class Roomba : MonoBehaviour
         _deltaMovement = 0f;
         _initialPosition = transform.position;
 
+        _vacuumSucker.SetActive(true);
+
         foreach (ParticleSystem ps in _particles) ps.Play();
 
         _audioSource.Play();
@@ -153,6 +157,8 @@ public class Roomba : MonoBehaviour
     {
         _deltaStationery = _cooldown;
         _isDriving = false;
+
+        _vacuumSucker.SetActive(false);
 
         foreach (ParticleSystem ps in _particles) ps.Stop();
 
