@@ -12,6 +12,7 @@ public class CanManager : MonoBehaviour
     [SerializeField] private Transform _leftTopSpawnCorner = null;
     [SerializeField] private Transform _rightBotSpawnCorner = null;
     [SerializeField] private float _shootStrength = 50f;
+    //[SerializeField] private 
     [SerializeField] GameObject _wer;
 
     private float _timer = 0;

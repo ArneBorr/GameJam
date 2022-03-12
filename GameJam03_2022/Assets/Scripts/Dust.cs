@@ -29,10 +29,10 @@ public class Dust : MonoBehaviour
         }
         if (other.tag == "Huisstofmijt")
         {
-            TheKiwiCoder.BehaviourTreeRunner btr = other.GetComponent<TheKiwiCoder.BehaviourTreeRunner>();
-            btr.tree.blackboard.dustsMovingTo.Remove(this.gameObject);
-            other.GetComponent<AudioSource>().Play();
-            Destroy(this.gameObject, other.GetComponent<AudioSource>().time);
+            other.GetComponent<Huisstofmijt>().ReachedDust();
+            AudioSource audios = other.GetComponent<AudioSource>();
+            audios.Play();
+            Destroy(this.gameObject, audios.time);
         }
     }
 }
