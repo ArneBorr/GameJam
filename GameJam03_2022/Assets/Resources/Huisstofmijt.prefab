@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 5688215167671535368}
   - component: {fileID: 4889926101722892205}
   - component: {fileID: 8237940950545066759}
+  - component: {fileID: 7234728072416932285}
   m_Layer: 0
   m_Name: Huisstofmijt
   m_TagString: Huisstofmijt
@@ -332,3 +333,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &7234728072416932285
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6390197272516145094}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 696cfe8c5a98b0b4aa61ed80882b8563, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
