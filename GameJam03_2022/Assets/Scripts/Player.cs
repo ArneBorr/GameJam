@@ -57,14 +57,14 @@ public class Player : MonoBehaviour
         _playerId = PhotonNetwork.LocalPlayer.ActorNumber - 1;
         _faceDirection = transform.forward;
 
-        // Add this gameobject as data to the photon player
-        foreach(Photon.Realtime.Player player in PhotonNetwork.PlayerList) 
-        {
-            if(player.ActorNumber == _playerId + 1)
-            {
-                player.TagObject = gameObject;
-            }
-        }
+        //// Add this gameobject as data to the photon player
+        //foreach(Photon.Realtime.Player player in PhotonNetwork.PlayerList) 
+        //{
+        //    if(player.ActorNumber == _playerId + 1)
+        //    {
+        //        player.TagObject = gameObject;
+        //    }
+        //}
 
         _particles.Add(_electricParticleParent.GetComponent<ParticleSystem>());
         foreach (ParticleSystem ps in _electricParticleParent.GetComponentsInChildren<ParticleSystem>()) _particles.Add(ps);
