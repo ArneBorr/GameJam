@@ -43,6 +43,7 @@ public class Player : MonoBehaviour
     private int _currentMeshStateIndex = 0;
     private bool _isCharged = false;
 
+    public int TotalScore { get { return _totalScore; } }
     public bool IsBeingVacuumed { get; set; }
 
     private void Start()
@@ -51,10 +52,19 @@ public class Player : MonoBehaviour
         _view = GetComponent<PhotonView>();
         _inputActions = new PlayerInputActions();
         _inputActions.Player.Fire.performed += Interact;
-        _characterController = GetComponent<CharacterController>();
         _inputActions.Player.Enable();
+        _characterController = GetComponent<CharacterController>();
         _playerId = PhotonNetwork.LocalPlayer.ActorNumber - 1;
         _faceDirection = transform.forward;
+
+        // Add this gameobject as data to the photon player
+        foreach(Photon.Realtime.Player player in PhotonNetwork.PlayerList) 
+        {
+            if(player.ActorNumber == _playerId + 1)
+            {
+                player.TagObject = gameObject;
+            }
+        }
 
         _particles.Add(_electricParticleParent.GetComponent<ParticleSystem>());
         foreach (ParticleSystem ps in _electricParticleParent.GetComponentsInChildren<ParticleSystem>()) _particles.Add(ps);

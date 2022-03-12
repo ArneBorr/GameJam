@@ -39,20 +39,21 @@ public class PlayerName : MonoBehaviour
 
     private void UpdateScoreTexts()
     {
-        int playerCount = PhotonNetwork.CountOfPlayers - 1;
+        int playerCount = PhotonNetwork.PlayerList.Length - 1;
 
         while (_textScores.Count < playerCount)
         {
             GameObject ui = Instantiate(_uiPrefab);
             ui.transform.parent = _listingElement.transform;
-            _textScores.Add(ui.GetComponent<TextMeshProUGUI>());
+            _textScores.Add(ui.GetComponentInChildren<TextMeshProUGUI>());
         }
 
         while (_textScores.Count > playerCount)
         {
-            GameObject obj = _textScores[_textScores.Count - 1].gameObject;
-            _textScores.RemoveAt(_textScores.Count - 1);
-            Destroy(obj);
+            int i = _textScores.Count - 1;
+            GameObject obj = _textScores[i].gameObject;
+            _textScores.RemoveAt(i);
+            Destroy(obj.transform.parent.gameObject);
         }
     }
 
@@ -63,7 +64,15 @@ public class PlayerName : MonoBehaviour
         {
             if (player != PhotonNetwork.LocalPlayer)
             {
-                _textScores[i].text = 1.ToString();
+                //int score = player.TagObject;
+                if(PhotonNetwork.LocalPlayer.TagObject == null) 
+                {
+                    _textScores[i].text = "000";
+                }
+                else 
+                {
+                    _textScores[i].text = (player.TagObject as GameObject).GetComponent<Player>().TotalScore.ToString();
+                }
 
                 i++;
             }
