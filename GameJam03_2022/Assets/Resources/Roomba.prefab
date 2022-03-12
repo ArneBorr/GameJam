@@ -1608,6 +1608,8 @@ GameObject:
   - component: {fileID: 9166399908133952689}
   - component: {fileID: 6305812614352997175}
   - component: {fileID: 8974216202796242899}
+  - component: {fileID: 1879557675237421998}
+  - component: {fileID: 338346004578078401}
   m_Layer: 0
   m_Name: Roomba
   m_TagString: Untagged
@@ -1715,7 +1717,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 2206b8db64e34c943809c0d248d43c82, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.15
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1799,6 +1801,45 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1879557675237421998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3663672263945849538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 338346004578078401}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &338346004578078401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3663672263945849538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 1
+  m_UseLocal: 1
 --- !u!1 &3745673976832710097
 GameObject:
   m_ObjectHideFlags: 0
@@ -4440,13 +4481,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3651823a41fca8344af5998405e31e9c, type: 3}
---- !u!1 &8567563802880947705 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 151910619444126488, guid: 3651823a41fca8344af5998405e31e9c, type: 3}
-  m_PrefabInstance: {fileID: 8430078819228260065}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8567563802880947701 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 151910619444126484, guid: 3651823a41fca8344af5998405e31e9c, type: 3}
+  m_PrefabInstance: {fileID: 8430078819228260065}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8567563802880947705 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 151910619444126488, guid: 3651823a41fca8344af5998405e31e9c, type: 3}
   m_PrefabInstance: {fileID: 8430078819228260065}
   m_PrefabAsset: {fileID: 0}
