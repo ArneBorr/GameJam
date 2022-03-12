@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
@@ -16,6 +14,4 @@ public class SpawnPlayers : MonoBehaviour
         Vector3 position = new Vector3(Random.Range(-x, x), y, Random.Range(-z, z));
         PhotonNetwork.Instantiate(_playerPrefab.name, position, Quaternion.identity);
     }
-
-
 }

@@ -147,8 +147,8 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _PlayerPosition: {r: -0.9644601, g: 0.53734994, b: -1.2386968, a: 0}
-    - _PlayerPosition0: {r: 1.9723169, g: 1.0799999, b: -4.6620374, a: 0}
-    - _PlayerPosition1: {r: 0.9203297, g: 0.53734994, b: -1.8145247, a: 0}
+    - _PlayerPosition0: {r: -2.6854599, g: 1.0799999, b: -1.5573429, a: 0}
+    - _PlayerPosition1: {r: -4.8347235, g: 1.0799999, b: -5.667637, a: 0}
     - _PlayerPosition2: {r: 0, g: 0, b: 0, a: 0}
     - _PlayerPosition3: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}

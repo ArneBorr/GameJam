@@ -24652,6 +24652,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a37894562451e469e378e3e150895d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _uiPrefab: {fileID: 4788830079357776687, guid: 8588549afb664b747baf9f21f1b0ed0f, type: 3}
 --- !u!143 &3799330881341562161
 CharacterController:
   m_ObjectHideFlags: 0
