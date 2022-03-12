@@ -12,8 +12,7 @@ public class CanManager : MonoBehaviour
     [SerializeField] private Transform _leftTopSpawnCorner = null;
     [SerializeField] private Transform _rightBotSpawnCorner = null;
     [SerializeField] private float _shootStrength = 50f;
-    //[SerializeField] private 
-    [SerializeField] GameObject _wer;
+    [SerializeField] private GameObject _dangerParticle = null;
 
     private float _timer = 0;
     private float _nextSpawnTime = 0;
@@ -48,7 +47,7 @@ public class CanManager : MonoBehaviour
         spawnPos.y = _leftTopSpawnCorner.position.y;
 
         //Spawn
-        GameObject can = Instantiate(_canPrefab, spawnPos, Quaternion.identity);
+        GameObject can = PhotonNetwork.Instantiate(_canPrefab.name, spawnPos, Quaternion.identity);
 
         //Direction
         Vector3 dirToMiddle = new Vector3(-spawnPos.x, spawnPos.y, -spawnPos.z);
@@ -64,13 +63,14 @@ public class CanManager : MonoBehaviour
         Vector3 _landingPos = Vector3.zero;
         for (int i=0; i < _spawnPositions.Length; i++)
         {
-            if (_spawnPositions[i].y <= 0.1f)
+            if (_spawnPositions[i].y <= 0.3f)
             {
                 _landingPos = _spawnPositions[i];
                 break;
             }
         }
 
-        Instantiate(_wer, _landingPos, Quaternion.identity);
+        GameObject particle = PhotonNetwork.Instantiate(_dangerParticle.name, _landingPos, Quaternion.Euler(90, 0, 0));
+        Destroy(particle, particle.GetComponent<ParticleSystem>().main.duration);
     }
 }
