@@ -22,14 +22,22 @@ public class Can : MonoBehaviour
             _rb.drag = 10000;
             _rb.angularDrag = 1000;
         }
+
+        Debug.DrawLine(_rb.transform.position, _rb.velocity * 10);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (_rb.velocity.magnitude > 1 && Vector3.Dot(_rb.velocity, this.transform.position - other.transform.position) > 0)
+        float mag = _rb.velocity.magnitude;
+
+        Vector2 rbVel = new Vector2(_rb.velocity.x, _rb.velocity.z);
+        Vector2 dir = new Vector2(this.transform.position.x - other.transform.position.x, this.transform.position.z - other.transform.position.z);
+
+        if ((mag > 0.5f && Vector2.Dot(rbVel, dir) > 0) || mag > 1.5f)
         {
             if (other.tag == "Player")
             {
+                Debug.Log("ER");
                 other.GetComponent<Player>().TakeDustOff(_dustToTakeOffPlayer);
             }
             else if (other.tag == "Dust")
@@ -38,6 +46,7 @@ public class Can : MonoBehaviour
             }
             else if (other.tag == "Huisstofmijt")
             {
+                GameObject.FindObjectOfType<HuisstofmijtManager>().SpawnMijt();
                 Destroy(other.gameObject);
             }
         }     

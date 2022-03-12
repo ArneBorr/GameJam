@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.AI;
 
 public class VacuumSucker : MonoBehaviour
 {
@@ -52,6 +53,18 @@ public class VacuumSucker : MonoBehaviour
             rb.angularDrag = 0;
             _rbToPull.Add(rb);
         }    
+        else if (other.CompareTag("Huisstofmijt"))
+        {
+            Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+            other.GetComponent<NavMeshAgent>().enabled = true;
+            rb.mass = 1f;
+            _rbToPull.Add(rb);
+        }
+        else if (other.CompareTag("Dust"))
+        {
+            Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+            _rbToPull.Add(rb);
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -75,6 +88,18 @@ public class VacuumSucker : MonoBehaviour
                 else if (other.CompareTag("Can"))
                 {
                     other.gameObject.GetComponent<Can>()._beingSucked = false;
+                    rb.useGravity = true;
+                    rb.drag = 1000;
+                    rb.mass = 1000;
+                    rb.angularDrag = 1000;
+                }
+                else if (other.CompareTag("Huisstofmijt"))
+                {
+                    other.GetComponent<NavMeshAgent>().enabled = true;
+                }
+                else if (other.CompareTag("Dust"))
+                {
+                    rb.velocity = Vector3.zero;
                 }
 
                 return;
