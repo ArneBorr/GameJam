@@ -24606,7 +24606,7 @@ MonoBehaviour:
   _lightningProjectilePrefab: {fileID: 5734939721724521188, guid: 379c9fe34a94f664ba41b8a21cb9d72f, type: 3}
   _projectileSocket: {fileID: 8065485137447284490}
   _electricParticleParent: {fileID: 683444763381314758}
-  _carpetMaterial: {fileID: 2100000, guid: 81097b69529f187438464a91ba7baf39, type: 2}
+  _carpetMaterial: {fileID: 2100000, guid: 8fa28f01ab77edd41bfd38be6626f2cc, type: 2}
 --- !u!114 &878662262476031665
 MonoBehaviour:
   m_ObjectHideFlags: 0
